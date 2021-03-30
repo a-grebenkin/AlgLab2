@@ -7,30 +7,17 @@ namespace AlgLab2
         Red,
         Black
     }
-    class RBTree
-    {
-        public RBTree Parent
-        {
-            get; private set;
-        }
-        public RBTree Left
-        {
-            get; private set;
-        }
-        public RBTree Right
-        {
-            get; private set;
-        }
-        public int Value
-        {
-            get; private set;
-        }
-        public ColorNode Color
-        {
-            get; private set;
-        }
 
-        public RBTree(int value, RBTree parent = null)
+    internal class RedBlackTree
+    {
+        public RedBlackTree Parent { get; private set; }
+        public RedBlackTree Left { get; private set; }
+        public RedBlackTree Right { get; private set; }
+        public int Value { get; private set; }
+
+        public ColorNode Color { get; }
+
+        public RedBlackTree(int value, RedBlackTree parent = null)
         {
             Value = value;
             Parent = parent;
@@ -40,44 +27,30 @@ namespace AlgLab2
         public void Add(int value)
         {
             if (value < Value)
-            {
                 if (Left == null)
-                {
-                    Left = new RBTree(value, this);
-                }
+                    Left = new RedBlackTree(value, this);
                 else
-                {
                     Left.Add(value);
-                }
-            }
             else
-            {
                 if (Right == null)
-                {
-                    Right = new RBTree(value, this);
-                }
+                    Right = new RedBlackTree(value, this);
                 else
-                {
                     Right.Add(value);
-                }
-            }
         }
 
-        private RBTree Search(int value)
+        private RedBlackTree Search(int value)
         {
-            if (value < Value)
-                return Left?.Search(value) ?? null;
-            if (value > Value)
-                return Right?.Search(value) ?? null;
-            if (Value == value)
-                return this;
-            return null;
+            if (value < Value) 
+                return Left?.Search(value);
+            if (value > Value) 
+                return Right?.Search(value);
+
+            return Value == value ? this : null;
         }
 
-
-        private bool Remove(RBTree tree)
+        private static bool Remove(RedBlackTree tree)
         {
-            if (tree == null)
+            if (tree == null) 
                 return false;
 
             //Корень
@@ -94,9 +67,11 @@ namespace AlgLab2
                     Remove(tree.Right);
                 }
                 else
-                    return true;//TODO: удаление последнего элемента
+                    return true; //TODO: удаление последнего элемента
+
                 return false;
             }
+
             //Лист
             if (tree.Left == null && tree.Right == null)
             {
@@ -127,42 +102,32 @@ namespace AlgLab2
             }
 
             ///Узел с правым и левым поддеревом
-            if (tree.Left != null && tree.Right != null)
-            {
-                RBTree current = tree.Right;
-                while (current.Left != null)
-                    current = current.Left;
+            if (tree.Left == null || tree.Right == null) 
+                return false;
+            var current = tree.Right;
 
-                tree.Value = current.Value;
-                Remove(current);
-            }
+            while (current.Left != null) 
+                current = current.Left;
+
+            tree.Value = current.Value;
+            Remove(current);
 
             return false;
-
         }
 
         public bool Remove(int value)
         {
-            RBTree tree = Search(value);
+            var tree = Search(value);
             return Remove(tree);
         }
 
-
-        private void Print(RBTree tree)
+        private void Print(RedBlackTree tree)
         {
-            if (tree.Left != null)
+            if (tree.Left != null) 
                 Print(tree.Left);
             Console.Write(tree.Value + " ");
-            if (tree.Right != null)
+            if (tree.Right != null) 
                 Print(tree.Right);
-        }
-
-        public void Print()
-        {
-            Console.WriteLine();
-            Print(this);
-            Console.WriteLine();
-            Console.WriteLine();
         }
     }
 }

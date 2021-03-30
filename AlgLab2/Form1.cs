@@ -12,7 +12,7 @@ namespace AlgLab2
 {
     public partial class Form1 : Form
     {
-        RBTree tree;
+        RedBlackTree tree;
         public Form1()
         {
             InitializeComponent();
@@ -31,7 +31,7 @@ namespace AlgLab2
             treeView1.ExpandAll();
         }
 
-        private void AddInTree(RBTree tree, TreeNode parent = null)
+        private void AddInTree(RedBlackTree tree, TreeNode parent = null)
         {
             var node = new TreeNode(tree.Value.ToString());
             node.ForeColor = Color.White;
@@ -59,7 +59,7 @@ namespace AlgLab2
         {
             int value = Int32.Parse(textBox1.Text);
             if (tree == null)
-                tree = new RBTree(value);
+                tree = new RedBlackTree(value);
             else
                 tree.Add(value);
             RenderTree();
